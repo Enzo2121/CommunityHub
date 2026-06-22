@@ -1,0 +1,27 @@
+.create-event-card { max-width: 680px; margin-inline: auto; padding: 2.25rem; }
+
+.type-toggle { display: flex; gap: 0.4rem; }
+
+.type-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.825rem;
+  font-weight: 600;
+  background: var(--surface);
+  transition: all var(--transition);
+  text-align: center;
+  color: var(--text-muted);
+}
+.type-option:hover { border-color: var(--primary-mid); color: var(--text); }
+.type-option.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.type-option input { display: none; }

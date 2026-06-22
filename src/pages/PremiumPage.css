@@ -1,0 +1,86 @@
+.premium-page-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 2.25rem;
+}
+
+.premium-page-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.premium-star {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.premium-perks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.premium-perk {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-mid);
+  border-radius: var(--radius-md);
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.premium-price-tag {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.premium-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.04em;
+}
+
+.payment-methods { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.payment-method-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: var(--surface);
+  transition: all var(--transition);
+}
+.payment-method-opt:hover { border-color: var(--primary-mid); background: var(--primary-light); }
+.payment-method-opt.selected { border-color: var(--primary); background: var(--primary-light); }
+.payment-method-opt input { display: none; }
+.payment-method-opt > span:first-of-type { flex: 1; font-weight: 500; font-size: 0.875rem; color: var(--text-secondary); }
+
+.premium-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+}
+.premium-total-row strong { font-size: 1.25rem; font-weight: 800; color: var(--primary); }

@@ -1,0 +1,29 @@
+.messages-header { margin-bottom: 1.25rem; }
+.messages-header h1 { margin-bottom: 0.2rem; }
+
+.messages-list { display: flex; flex-direction: column; gap: 0.65rem; }
+
+.message-item {
+  display: flex;
+  gap: 0.9rem;
+  padding: 1.1rem;
+  align-items: flex-start;
+  transition: border-color var(--transition);
+  background: var(--surface);
+}
+.message-item:hover { border-color: var(--border-hover); }
+
+.message-avatar-col { flex-shrink: 0; }
+.message-body { flex: 1; min-width: 0; }
+
+.message-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+  flex-wrap: wrap;
+}
+.message-meta strong { font-size: 0.875rem; color: var(--text); }
+
+.message-text { color: var(--text-muted); font-size: 0.875rem; line-height: 1.6; word-break: break-word; }
