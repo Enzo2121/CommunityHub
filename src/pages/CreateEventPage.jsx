@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { createEvent, fetchCategories, clearEventStatus } from '../features/events/eventsSlice';
+import CategoryForm from '../components/categories/CategoryForm';
 import './AuthPages.css';
 import './CreateEventPage.css';
 
@@ -13,6 +14,7 @@ export default function CreateEventPage() {
   const { user } = useSelector((s) => s.auth);
 
   const isPremium = user?.is_premium || user?.premium === 1 || user?.premium === true;
+  const isAdmin = user?.role === 'admin' || user?.is_admin === true || user?.is_admin === 1;
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
     defaultValues: { event_type: 'presentiel', price_type: 'gratuit', price: 0 },
@@ -48,10 +50,29 @@ export default function CreateEventPage() {
   }
 
   const onSubmit = (data) => {
+    const start = new Date(data.start_date);
+    const end = new Date(data.end_date);
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return;
+    }
+
+    if (end <= start) {
+      alert('La date de fin doit être postérieure à la date de début.');
+      return;
+    }
+
+    const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+    if (+startDay === +endDay) {
+      alert('La date de fin ne peut pas être le même jour que la date de début.');
+      return;
+    }
+
     const payload = {
       ...data,
       event_category_id: parseInt(data.event_category_id),
-      price: parseFloat(data.price),
+      price: data.price_type === 'gratuit' ? 0 : parseFloat(data.price),
       max_participants: parseInt(data.max_participants),
     };
     dispatch(createEvent(payload));
@@ -84,16 +105,26 @@ export default function CreateEventPage() {
 
             <div className="form-group">
               <label className="form-label">Catégorie *</label>
-              <select
-                className="form-control"
-                {...register('event_category_id', { required: 'Requis' })}
-              >
-                <option value="">Choisir une catégorie</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
+              {isLoading && categories.length === 0 ? (
+                <div className="text-muted text-sm">⏳ Chargement des catégories…</div>
+              ) : categories.length === 0 ? (
+                <div className="alert alert-warning text-sm">
+                  Aucune catégorie disponible.
+                  {isAdmin && ' Créez-en une ci-dessous.'}
+                </div>
+              ) : (
+                <select
+                  className="form-control"
+                  {...register('event_category_id', { required: 'Requis' })}
+                >
+                  <option value="">Choisir une catégorie</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              )}
               {errors.event_category_id && <span className="form-error">{errors.event_category_id.message}</span>}
+              {isAdmin && <div style={{ marginTop: '0.75rem' }}><CategoryForm /></div>}
             </div>
 
             <div className="form-grid">

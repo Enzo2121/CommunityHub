@@ -54,6 +54,18 @@ export const fetchMe = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  'auth/updateUser',
+  async (formData, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      return await post('/users/update.php', formData, token);
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 // ─── Slice ────────────────────────────────────────────────────────────────────
 
 const initialToken = localStorage.getItem('auth_token');
@@ -133,6 +145,23 @@ const authSlice = createSlice({
         state.token = null;
         state.isInitialized = true;
         localStorage.removeItem('auth_token');
+      })
+
+      // Update user
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const updated = action.payload?.user || action.payload?.data || action.payload;
+        if (updated && typeof updated === 'object') {
+          state.user = { ...state.user, ...updated };
+        }
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });

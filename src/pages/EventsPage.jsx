@@ -8,7 +8,7 @@ export default function EventsPage() {
   const dispatch = useDispatch();
   const { events, categories, isLoading } = useSelector((s) => s.events);
 
-  const [filters, setFilters] = useState({ q: '', category_id: '', type: '', price_type: '' });
+  const [filters, setFilters] = useState({ q: '', category_id: '', type: '', price_type: '', date_filter: '' });
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -81,10 +81,20 @@ export default function EventsPage() {
             <option value="payant">💰 Payant</option>
           </select>
 
+          <select
+            className="form-control filter-select"
+            value={filters.date_filter}
+            onChange={(e) => handleFilter('date_filter', e.target.value)}
+          >
+            <option value="">Toutes les dates</option>
+            <option value="upcoming">📅 À venir</option>
+            <option value="past">⌛ Passés</option>
+          </select>
+
           {Object.values(filters).some((v) => v !== '') && (
             <button
               className="btn btn-ghost btn-sm"
-              onClick={() => setFilters({ q: '', category_id: '', type: '', price_type: '' })}
+              onClick={() => setFilters({ q: '', category_id: '', type: '', price_type: '', date_filter: '' })}
             >
               ✕ Réinitialiser
             </button>

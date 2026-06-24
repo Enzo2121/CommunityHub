@@ -6,6 +6,7 @@ import {
   fetchEventById,
   registerToEvent,
   postEventMessage,
+  moderateEventMessage,
   clearEventStatus,
 } from '../features/events/eventsSlice';
 import './EventDetailsPage.css';
@@ -62,6 +63,10 @@ export default function EventDetailsPage() {
 
   const isPaid = event.price_type === 'payant';
   const isDistanciel = event.event_type === 'distanciel';
+  const isOrganizer = user && event.organizer && user.id === event.organizer.id;
+  const isFull = event.max_participants != null && event.participants_count >= event.max_participants;
+  const now = new Date();
+  const isPast = event.end_date && new Date(event.end_date) < now;
 
   return (
     <div className="event-detail-page page-wrapper">
@@ -115,17 +120,38 @@ export default function EventDetailsPage() {
 
               {event.messages && event.messages.length > 0 ? (
                 <div className="comments-list">
-                  {event.messages.map((msg, i) => (
-                    <div className="comment-item" key={msg.id || i}>
-                      <div className="avatar-placeholder avatar-sm">
-                        {msg.user?.pseudo?.[0]?.toUpperCase() || '?'}
+                  {event.messages.map((msg, i) => {
+                    const isPending = msg.status === 'pending_deletion';
+                    return (
+                      <div className="comment-item" key={msg.id || i}>
+                        <div className="avatar-placeholder avatar-sm">
+                          {msg.user?.pseudo?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <div className="comment-body" style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem' }}>
+                            <strong>{msg.user?.pseudo || 'Anonyme'}</strong>
+                            {isOrganizer && !isPending && (
+                              <button
+                                type="button"
+                                className="btn btn-danger btn-sm"
+                                onClick={() => dispatch(moderateEventMessage({ message_id: msg.id, action: 'request_delete' }))}
+                                disabled={isLoading}
+                              >
+                                Modérer
+                              </button>
+                            )}
+                          </div>
+                          {isPending ? (
+                            <p className="text-muted text-sm" style={{ fontStyle: 'italic', marginTop: '0.25rem' }}>
+                              🕓 Ce message est en attente de validation admin.
+                            </p>
+                          ) : (
+                            <p style={{ marginTop: '0.25rem' }}>{msg.message}</p>
+                          )}
+                        </div>
                       </div>
-                      <div className="comment-body">
-                        <strong>{msg.user?.pseudo || 'Anonyme'}</strong>
-                        <p>{msg.message}</p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <p className="text-muted text-sm">Soyez le premier à commenter !</p>
@@ -175,23 +201,36 @@ export default function EventDetailsPage() {
 
               {token && isPremium ? (
                 <>
-                  {isPaid && (
-                    <select
-                      className="form-control"
-                      value={paymentMethod}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    >
-                      <option value="stripe">💳 Stripe</option>
-                      <option value="cheque">📝 Chèque</option>
-                    </select>
+                  {isFull ? (
+                    <div className="alert alert-warning text-sm">⚠️ Cet événement est complet.</div>
+                  ) : isPast ? (
+                    <div className="alert alert-muted text-sm">Cet événement est terminé.</div>
+                  ) : (
+                    <>
+                      {isPaid && (
+                        <>
+                          <select
+                            className="form-control"
+                            value={paymentMethod}
+                            onChange={(e) => setPaymentMethod(e.target.value)}
+                          >
+                            <option value="stripe">💳 Stripe</option>
+                            <option value="cheque">📝 Chèque</option>
+                          </select>
+                          <p className="text-muted text-sm" style={{ marginTop: '0.5rem' }}>
+                            Une commission de 10 % est prélevée sur chaque inscription payante.
+                          </p>
+                        </>
+                      )}
+                      <button
+                        className="btn btn-primary btn-full"
+                        onClick={handleRegister}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? '...' : "✅ S'inscrire à l'événement"}
+                      </button>
+                    </>
                   )}
-                  <button
-                    className="btn btn-primary btn-full"
-                    onClick={handleRegister}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? '...' : "✅ S'inscrire à l'événement"}
-                  </button>
                 </>
               ) : token && !isPremium ? (
                 <div className="register-premium-cta">

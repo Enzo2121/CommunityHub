@@ -65,7 +65,7 @@ export default function MainNavbar() {
                 </button>
                 {menuOpen && (
                   <div className="navbar-dropdown">
-                    <Link to="/dashboard" className="dropdown-item" onClick={() => setMenuOpen(false)}>
+                    <Link to="/profile" className="dropdown-item" onClick={() => setMenuOpen(false)}>
                       👤 Mon profil
                     </Link>
                     {isPremium && (

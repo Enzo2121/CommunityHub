@@ -10,6 +10,7 @@ import EventsPage from '../pages/EventsPage';
 import EventDetailsPage from '../pages/EventDetailsPage';
 import CreateEventPage from '../pages/CreateEventPage';
 import DashboardPage from '../pages/DashboardPage';
+import ProfilePage from '../pages/ProfilePage';
 import ContactsPage from '../pages/ContactsPage';
 import MessagesPage from '../pages/MessagesPage';
 import SkillsPage from '../pages/SkillsPage';
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: '/dashboard', element: <DashboardPage /> },
+          { path: '/profile', element: <ProfilePage /> },
           { path: '/premium', element: <PremiumPage /> },
           { path: '/contacts', element: <ContactsPage /> },
           { path: '/messages', element: <MessagesPage /> },

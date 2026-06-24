@@ -16,6 +16,14 @@ import {
   sendMessage,
   clearMessageStatus,
 } from '../features/messages/messagesSlice';
+import {
+  fetchMyRegistrations,
+  fetchMyEvents,
+  fetchEarnings,
+  rateOrganizer,
+  requestWithdrawal,
+  clearUserStatus,
+} from '../features/user/userSlice';
 import { useForm } from 'react-hook-form';
 import './DashboardPage.css';
 
@@ -36,6 +44,14 @@ export default function DashboardPage() {
   const { payments } = useSelector((s) => s.payments);
   const { contacts, users, success: contactSuccess, error: contactError } = useSelector((s) => s.contacts);
   const { received, success: msgSuccess, error: msgError, isLoading: msgLoading } = useSelector((s) => s.messages);
+  const {
+    registrations,
+    myEvents,
+    earnings,
+    isLoading: userLoading,
+    success: userSuccess,
+    error: userError,
+  } = useSelector((s) => s.user);
 
   const isPremium = user?.is_premium || user?.premium === 1 || user?.premium === true;
   const isOrganizer = user?.user_status_id === 2 || user?.status_id === 2;
@@ -69,6 +85,9 @@ export default function DashboardPage() {
       dispatch(fetchContacts());
       dispatch(fetchUsers());
       dispatch(fetchReceivedMessages());
+      dispatch(fetchMyRegistrations());
+      dispatch(fetchMyEvents());
+      dispatch(fetchEarnings());
     }
   }, [dispatch, isPremium]);
 
@@ -78,6 +97,12 @@ export default function DashboardPage() {
       setTimeout(() => dispatch(clearSkillStatus()), 3000);
     }
   }, [skillSuccess, dispatch, resetSkillForm]);
+
+  useEffect(() => {
+    if (userSuccess) {
+      setTimeout(() => dispatch(clearUserStatus()), 3000);
+    }
+  }, [userSuccess, dispatch]);
 
   useEffect(() => {
     if (contactSuccess || msgSuccess) {
@@ -282,8 +307,84 @@ export default function DashboardPage() {
               </section>
             </div>
 
-            {/* Column Right: Contacts, Actions & Payments */}
+            {/* Column Right: Events, Contacts, Actions & Payments */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* Mes événements */}
+              <section className="dashboard-section card animate-fade-up">
+                <div className="section-header">
+                  <div>
+                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>📅 Mes événements</h2>
+                    <p className="text-muted text-sm">Vos inscriptions et événements organisés</p>
+                  </div>
+                </div>
+
+                {userSuccess && <div className="alert alert-success">{userSuccess}</div>}
+                {userError && <div className="alert alert-danger">{userError}</div>}
+
+                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>🎟️ Mes inscriptions</h3>
+                {registrations.length === 0 ? (
+                  <div className="empty-state" style={{ paddingBlock: '1rem' }}>
+                    <p className="text-muted text-sm">Vous n'êtes inscrit à aucun événement.</p>
+                  </div>
+                ) : (
+                  <div className="skills-list" style={{ gap: '0.6rem', marginBottom: '1.5rem' }}>
+                    {registrations.map((reg) => {
+                      const evt = reg.event || reg;
+                      const isEventPast = evt.end_date && new Date(evt.end_date) < new Date();
+                      return (
+                        <div className="skill-item" style={{ flexDirection: 'column', alignItems: 'stretch' }} key={reg.id || evt.id}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Link to={`/events/${evt.id}`} style={{ fontSize: '0.9rem', fontWeight: '600' }}>{evt.name}</Link>
+                            <span className={`badge ${isEventPast ? 'badge-muted' : 'badge-primary'}`} style={{ fontSize: '0.7rem' }}>
+                              {isEventPast ? 'Passé' : 'En cours'}
+                            </span>
+                          </div>
+                          <span className="text-muted text-sm">{formatDate(evt.start_date)}</span>
+                          {isEventPast && evt.organizer_id && evt.organizer_id !== user?.id && (
+                            <button
+                              type="button"
+                              className="btn btn-success btn-sm"
+                              style={{ marginTop: '0.5rem', alignSelf: 'flex-start' }}
+                              onClick={() => dispatch(rateOrganizer({ event_id: evt.id, organizer_id: evt.organizer_id, vote: 1 }))}
+                              disabled={userLoading}
+                            >
+                              👍 J'aime l'organisateur
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <hr className="divider" />
+
+                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem', marginTop: '1rem' }}>🎪 Mes événements organisés</h3>
+                {myEvents.length === 0 ? (
+                  <div className="empty-state" style={{ paddingBlock: '1rem' }}>
+                    <p className="text-muted text-sm">Vous n'avez organisé aucun événement.</p>
+                    <Link to="/events/create" className="btn btn-primary btn-sm" style={{ marginTop: '0.5rem' }}>Créer un événement</Link>
+                  </div>
+                ) : (
+                  <div className="skills-list" style={{ gap: '0.6rem' }}>
+                    {myEvents.map((evt) => {
+                      const isEventPast = evt.end_date && new Date(evt.end_date) < new Date();
+                      return (
+                        <div className="skill-item" style={{ flexDirection: 'column', alignItems: 'stretch' }} key={evt.id}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Link to={`/events/${evt.id}`} style={{ fontSize: '0.9rem', fontWeight: '600' }}>{evt.name}</Link>
+                            <span className={`badge ${isEventPast ? 'badge-muted' : 'badge-primary'}`} style={{ fontSize: '0.7rem' }}>
+                              {isEventPast ? 'Passé' : 'En cours'}
+                            </span>
+                          </div>
+                          <span className="text-muted text-sm">{formatDate(evt.start_date)} · {evt.participants_count || 0} participant(s)</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+
               {/* Mes Contacts */}
               <section className="dashboard-section card animate-fade-up">
                 <div className="section-header">
@@ -441,6 +542,40 @@ export default function DashboardPage() {
                       ))}
                     </div>
                   </>
+                )}
+              </section>
+
+              {/* Mes finances */}
+              <section className="dashboard-section card animate-fade-up">
+                <h2 className="section-title" style={{ fontSize: '1.3rem' }}>💰 Mes finances</h2>
+
+                {earnings ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span className="text-muted">Argent généré</span>
+                      <strong style={{ fontSize: '1.25rem' }}>{earnings.total || 0} €</strong>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span className="text-muted text-sm">Inscriptions payantes</span>
+                      <span className="badge badge-primary">{earnings.paid_count || 0}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span className="text-muted text-sm">Commission prélevée (10 %)</span>
+                      <span className="badge badge-warning">-{earnings.fees || 0} €</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-accent btn-full"
+                      onClick={() => dispatch(requestWithdrawal())}
+                      disabled={userLoading || (earnings.total || 0) <= 0}
+                    >
+                      {userLoading ? '...' : '💸 Demander le paiement'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="empty-state" style={{ paddingBlock: '1rem' }}>
+                    <p className="text-muted text-sm">Aucune donnée financière disponible.</p>
+                  </div>
                 )}
               </section>
             </div>

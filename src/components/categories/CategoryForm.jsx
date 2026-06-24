@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCategory, clearEventStatus } from '../../features/events/eventsSlice';
+import { createCategory, fetchCategories, clearEventStatus } from '../../features/events/eventsSlice';
 import { useEffect } from 'react';
 
 /**
@@ -18,6 +18,7 @@ export default function CategoryForm() {
   useEffect(() => {
     if (success) {
       reset();
+      dispatch(fetchCategories());
       setTimeout(() => dispatch(clearEventStatus()), 3000);
     }
   }, [success, dispatch, reset]);

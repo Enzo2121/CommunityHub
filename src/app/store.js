@@ -5,6 +5,7 @@ import contactsReducer from '../features/contacts/contactsSlice';
 import messagesReducer from '../features/messages/messagesSlice';
 import skillsReducer from '../features/skills/skillsSlice';
 import paymentsReducer from '../features/payments/paymentsSlice';
+import userReducer from '../features/user/userSlice';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     messages: messagesReducer,
     skills: skillsReducer,
     payments: paymentsReducer,
+    user: userReducer,
   },
 });
 
