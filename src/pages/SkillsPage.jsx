@@ -17,7 +17,7 @@ export default function SkillsPage() {
       <div className="container">
         <div className="skills-header animate-fade-up">
           <div>
-            <h1>🎯 Compétences</h1>
+            <h1>Compétences</h1>
             <p className="text-muted">Explorez les expertises proposées par la communauté</p>
           </div>
           <span className="badge badge-muted">{skills.length} compétence{skills.length !== 1 ? 's' : ''}</span>
@@ -27,7 +27,7 @@ export default function SkillsPage() {
           <div className="spinner" />
         ) : skills.length === 0 ? (
           <div className="empty-state animate-fade-up">
-            <div className="empty-state-icon">🎯</div>
+            <div className="empty-state-icon">C</div>
             <h3>Aucune compétence disponible</h3>
             <p>Les membres premium peuvent proposer leurs compétences.</p>
           </div>

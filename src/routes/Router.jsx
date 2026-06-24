@@ -1,9 +1,8 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import ProtectedRoute from './ProtectedRoute';
 import AdminRoute from './AdminRoute';
 
-import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import EventsPage from '../pages/EventsPage';
@@ -22,7 +21,7 @@ const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { path: '/', element: <HomePage /> },
+      { path: '/', element: <Navigate to="/dashboard" replace /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/register', element: <RegisterPage /> },
       { path: '/events', element: <EventsPage /> },

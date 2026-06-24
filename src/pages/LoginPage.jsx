@@ -32,12 +32,12 @@ export default function LoginPage() {
         <div className="auth-card card animate-fade-up" style={{ maxWidth: 460 }}>
           <div className="auth-header">
             <h1 className="auth-title">Connexion</h1>
-            <p className="text-muted">Bon retour parmi nous 👋</p>
+            <p className="text-muted">Bon retour parmi nous</p>
           </div>
 
           {justRegistered && (
             <div className="alert alert-success">
-              ✅ Compte créé ! Vérifiez votre email puis connectez-vous.
+              Compte créé ! Vérifiez votre email puis connectez-vous.
             </div>
           )}
 

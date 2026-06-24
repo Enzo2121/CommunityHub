@@ -41,7 +41,6 @@ export default function PremiumPage() {
         <div className="premium-page-card card animate-fade-up">
           {/* Header */}
           <div className="premium-page-header">
-            <div className="premium-star">⭐</div>
             <h1>Passer Premium</h1>
             <p className="text-muted">Débloquez toutes les fonctionnalités de CommunityHub</p>
           </div>
@@ -49,14 +48,13 @@ export default function PremiumPage() {
           {/* Perks */}
           <div className="premium-perks">
             {[
-              { icon: '🎯', text: 'Proposez vos compétences' },
-              { icon: '🎉', text: 'Créez des événements' },
-              { icon: '🤝', text: 'Ajoutez des contacts' },
-              { icon: '💬', text: 'Messages privés illimités' },
-            ].map((p) => (
-              <div className="premium-perk" key={p.text}>
-                <span>{p.icon}</span>
-                <span>{p.text}</span>
+              'Proposez vos compétences',
+              'Créez des événements',
+              'Ajoutez des contacts',
+              'Messages privés illimités',
+            ].map((text) => (
+              <div className="premium-perk" key={text}>
+                <span>{text}</span>
               </div>
             ))}
           </div>
@@ -68,7 +66,7 @@ export default function PremiumPage() {
 
           {success ? (
             <div className="alert alert-success" style={{ textAlign: 'center' }}>
-              🎉 {success} Redirection en cours...
+              {success} Redirection en cours...
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
@@ -79,12 +77,12 @@ export default function PremiumPage() {
                 <div className="payment-methods">
                   <label className={`payment-method-opt ${watch('payment_method') === 'stripe' ? 'selected' : ''}`}>
                     <input type="radio" value="stripe" {...register('payment_method')} />
-                    <span>💳 Carte bancaire (Stripe)</span>
+                    <span>Carte bancaire (Stripe)</span>
                     <span className="badge badge-success">Simulé</span>
                   </label>
                   <label className={`payment-method-opt ${watch('payment_method') === 'cheque' ? 'selected' : ''}`}>
                     <input type="radio" value="cheque" {...register('payment_method')} />
-                    <span>📝 Chèque</span>
+                    <span>Chèque</span>
                   </label>
                 </div>
               </div>
@@ -97,7 +95,7 @@ export default function PremiumPage() {
               <button type="submit" className="btn btn-accent btn-full btn-lg" disabled={isLoading}>
                 {isLoading
                   ? <><span className="spinner spinner-sm" /> Traitement...</>
-                  : '⭐ Passer Premium maintenant'}
+                  : 'Passer Premium maintenant'}
               </button>
 
               <p className="text-muted text-sm text-center">

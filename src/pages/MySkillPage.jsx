@@ -35,7 +35,7 @@ export default function MySkillPage() {
     return (
       <div className="page-wrapper container text-center">
         <div className="empty-state">
-          <div className="empty-state-icon">⭐</div>
+          <div className="empty-state-icon">P</div>
           <h3>Réservé aux membres premium</h3>
           <Link to="/premium" className="btn btn-accent" style={{ marginTop: '1rem' }}>Passer Premium</Link>
         </div>
@@ -48,7 +48,7 @@ export default function MySkillPage() {
       <div className="container">
         <div className="skills-header animate-fade-up">
           <div>
-            <h1>🎯 Mes compétences</h1>
+            <h1>Mes compétences</h1>
             <p className="text-muted">Proposez vos expertises à la communauté</p>
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function MySkillPage() {
         <h2 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>Mes compétences ({mySkills.length})</h2>
         {mySkills.length === 0 ? (
           <div className="empty-state animate-fade-up">
-            <div className="empty-state-icon">🎯</div>
+            <div className="empty-state-icon">C</div>
             <h3>Aucune compétence publiée</h3>
             <p>Utilisez le formulaire ci-dessus pour ajouter votre première compétence.</p>
           </div>

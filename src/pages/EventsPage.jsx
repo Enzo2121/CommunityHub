@@ -41,7 +41,7 @@ export default function EventsPage() {
         {/* Filters */}
         <div className="events-filters card animate-fade-up">
           <div className="filter-search">
-            <span className="filter-search-icon">🔍</span>
+            <span className="filter-search-icon">Search</span>
             <input
               className="form-control filter-input"
               placeholder="Rechercher un événement..."
@@ -67,8 +67,8 @@ export default function EventsPage() {
             onChange={(e) => handleFilter('type', e.target.value)}
           >
             <option value="">Tous les types</option>
-            <option value="presentiel">📍 Présentiel</option>
-            <option value="distanciel">🌐 Distanciel</option>
+            <option value="presentiel">Présentiel</option>
+            <option value="distanciel">Distanciel</option>
           </select>
 
           <select
@@ -77,8 +77,8 @@ export default function EventsPage() {
             onChange={(e) => handleFilter('price_type', e.target.value)}
           >
             <option value="">Tous les tarifs</option>
-            <option value="gratuit">🆓 Gratuit</option>
-            <option value="payant">💰 Payant</option>
+            <option value="gratuit">Gratuit</option>
+            <option value="payant">Payant</option>
           </select>
 
           <select
@@ -87,8 +87,8 @@ export default function EventsPage() {
             onChange={(e) => handleFilter('date_filter', e.target.value)}
           >
             <option value="">Toutes les dates</option>
-            <option value="upcoming">📅 À venir</option>
-            <option value="past">⌛ Passés</option>
+            <option value="upcoming">À venir</option>
+            <option value="past">Passés</option>
           </select>
 
           {Object.values(filters).some((v) => v !== '') && (
@@ -96,7 +96,7 @@ export default function EventsPage() {
               className="btn btn-ghost btn-sm"
               onClick={() => setFilters({ q: '', category_id: '', type: '', price_type: '', date_filter: '' })}
             >
-              ✕ Réinitialiser
+              Réinitialiser
             </button>
           )}
         </div>
@@ -106,7 +106,7 @@ export default function EventsPage() {
           <div className="spinner" style={{ marginTop: '3rem' }} />
         ) : events.length === 0 ? (
           <div className="empty-state animate-fade-up">
-            <div className="empty-state-icon">🎉</div>
+            <div className="empty-state-icon">E</div>
             <h3>Aucun événement trouvé</h3>
             <p>Essayez de modifier vos filtres ou revenez plus tard.</p>
           </div>

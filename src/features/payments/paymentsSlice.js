@@ -53,7 +53,7 @@ const paymentsSlice = createSlice({
       .addCase(upgradeToPremium.pending, (state) => { state.isLoading = true; state.error = null; })
       .addCase(upgradeToPremium.fulfilled, (state) => {
         state.isLoading = false;
-        state.success = 'Félicitations ! Vous êtes maintenant membre premium 🎉';
+        state.success = 'Félicitations ! Vous êtes maintenant membre premium';
       })
       .addCase(upgradeToPremium.rejected, (state, action) => {
         state.isLoading = false;

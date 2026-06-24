@@ -85,10 +85,10 @@ export default function EventDetailsPage() {
             <div className="event-detail-content card">
               <div className="event-detail-badges">
                 <span className={`badge ${isDistanciel ? 'badge-primary' : 'badge-success'}`}>
-                  {isDistanciel ? '🌐 Distanciel' : '📍 Présentiel'}
+                  {isDistanciel ? 'Distanciel' : 'Présentiel'}
                 </span>
                 <span className={`badge ${isPaid ? 'badge-warning' : 'badge-muted'}`}>
-                  {isPaid ? `💰 ${event.price} €` : '🆓 Gratuit'}
+                  {isPaid ? `${event.price} €` : 'Gratuit'}
                 </span>
                 {event.category?.name && (
                   <span className="badge badge-muted">{event.category.name}</span>
@@ -116,7 +116,7 @@ export default function EventDetailsPage() {
 
             {/* Comments */}
             <div className="event-comments card animate-fade-up">
-              <h2 style={{ fontSize: '1.15rem', marginBottom: '1.25rem' }}>💬 Commentaires</h2>
+              <h2 style={{ fontSize: '1.15rem', marginBottom: '1.25rem' }}>Commentaires</h2>
 
               {event.messages && event.messages.length > 0 ? (
                 <div className="comments-list">
@@ -143,7 +143,7 @@ export default function EventDetailsPage() {
                           </div>
                           {isPending ? (
                             <p className="text-muted text-sm" style={{ fontStyle: 'italic', marginTop: '0.25rem' }}>
-                              🕓 Ce message est en attente de validation admin.
+                              Ce message est en attente de validation admin.
                             </p>
                           ) : (
                             <p style={{ marginTop: '0.25rem' }}>{msg.message}</p>
@@ -202,7 +202,7 @@ export default function EventDetailsPage() {
               {token && isPremium ? (
                 <>
                   {isFull ? (
-                    <div className="alert alert-warning text-sm">⚠️ Cet événement est complet.</div>
+                    <div className="alert alert-warning text-sm">Cet événement est complet.</div>
                   ) : isPast ? (
                     <div className="alert alert-muted text-sm">Cet événement est terminé.</div>
                   ) : (
@@ -214,8 +214,8 @@ export default function EventDetailsPage() {
                             value={paymentMethod}
                             onChange={(e) => setPaymentMethod(e.target.value)}
                           >
-                            <option value="stripe">💳 Stripe</option>
-                            <option value="cheque">📝 Chèque</option>
+                            <option value="stripe">Stripe</option>
+                            <option value="cheque">Chèque</option>
                           </select>
                           <p className="text-muted text-sm" style={{ marginTop: '0.5rem' }}>
                             Une commission de 10 % est prélevée sur chaque inscription payante.
@@ -227,7 +227,7 @@ export default function EventDetailsPage() {
                         onClick={handleRegister}
                         disabled={isLoading}
                       >
-                        {isLoading ? '...' : "✅ S'inscrire à l'événement"}
+                        {isLoading ? '...' : "S'inscrire à l'événement"}
                       </button>
                     </>
                   )}

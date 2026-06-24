@@ -32,16 +32,16 @@ export default function MessagesPage() {
     <div className="messages-page page-wrapper">
       <div className="container">
         <div className="messages-header">
-          <h1>💬 Messages privés</h1>
+          <h1>Messages privés</h1>
           <p className="text-muted">Vos conversations avec vos contacts</p>
         </div>
 
         <div className="tabs" style={{ marginBottom: '1.5rem' }}>
           <button className={`tab-btn ${tab === 'received' ? 'active' : ''}`} onClick={() => setTab('received')}>
-            📥 Reçus ({received.length})
+            Reçus ({received.length})
           </button>
           <button className={`tab-btn ${tab === 'sent' ? 'active' : ''}`} onClick={() => setTab('sent')}>
-            📤 Envoyés ({sent.length})
+            Envoyés ({sent.length})
           </button>
         </div>
 
@@ -49,7 +49,7 @@ export default function MessagesPage() {
           <div className="spinner" />
         ) : messages.length === 0 ? (
           <div className="empty-state animate-fade-up">
-            <div className="empty-state-icon">{tab === 'received' ? '📥' : '📤'}</div>
+            <div className="empty-state-icon">{tab === 'received' ? 'R' : 'E'}</div>
             <h3>Aucun message {tab === 'received' ? 'reçu' : 'envoyé'}</h3>
             <p>Vos {tab === 'received' ? 'messages reçus' : 'messages envoyés'} apparaîtront ici.</p>
           </div>

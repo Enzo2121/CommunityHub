@@ -85,7 +85,7 @@ export default function CreateEventPage() {
 
         <div className="create-event-card card animate-fade-up">
           <div style={{ marginBottom: '2rem' }}>
-            <h1>🎉 Créer un événement</h1>
+            <h1>Créer un événement</h1>
             <p className="text-muted">Organisez un événement pour la communauté</p>
           </div>
 
@@ -134,7 +134,7 @@ export default function CreateEventPage() {
                   {['presentiel', 'distanciel'].map((t) => (
                     <label key={t} className={`type-option ${watch('event_type') === t ? 'selected' : ''}`}>
                       <input type="radio" value={t} {...register('event_type')} />
-                      {t === 'presentiel' ? '📍 Présentiel' : '🌐 Distanciel'}
+                      {t === 'presentiel' ? 'Présentiel' : 'Distanciel'}
                     </label>
                   ))}
                 </div>
@@ -145,7 +145,7 @@ export default function CreateEventPage() {
                   {['gratuit', 'payant'].map((t) => (
                     <label key={t} className={`type-option ${watch('price_type') === t ? 'selected' : ''}`}>
                       <input type="radio" value={t} {...register('price_type')} />
-                      {t === 'gratuit' ? '🆓 Gratuit' : '💰 Payant'}
+                      {t === 'gratuit' ? 'Gratuit' : 'Payant'}
                     </label>
                   ))}
                 </div>
@@ -219,7 +219,7 @@ export default function CreateEventPage() {
             </div>
 
             <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={isLoading}>
-              {isLoading ? <><span className="spinner spinner-sm" /> Création...</> : '🎉 Créer l\'événement'}
+              {isLoading ? <><span className="spinner spinner-sm" /> Création...</> : 'Créer l\'événement'}
             </button>
           </form>
         </div>

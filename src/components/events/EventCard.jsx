@@ -23,16 +23,16 @@ export default function EventCard({ event }) {
         )}
         {!event.image && (
           <div className="event-card-img-placeholder">
-            <span>🎉</span>
+            <span>CommunityHub</span>
           </div>
         )}
         <div className="event-card-body">
           <div className="event-card-badges">
             <span className={`badge ${isDistanciel ? 'badge-primary' : 'badge-success'}`}>
-              {isDistanciel ? '🌐 Distanciel' : '📍 Présentiel'}
+              {isDistanciel ? 'Distanciel' : 'Présentiel'}
             </span>
             <span className={`badge ${isPaid ? 'badge-warning' : 'badge-muted'}`}>
-              {isPaid ? `💰 ${event.price} €` : '🆓 Gratuit'}
+              {isPaid ? `${event.price} €` : 'Gratuit'}
             </span>
           </div>
 
@@ -43,9 +43,9 @@ export default function EventCard({ event }) {
           )}
 
           <div className="event-card-meta">
-            <span>📅 {formatDate(event.start_date)}</span>
+            <span>{formatDate(event.start_date)}</span>
             {event.max_participants && (
-              <span>👥 {event.participants_count || 0} / {event.max_participants}</span>
+              <span>{event.participants_count || 0} / {event.max_participants}</span>
             )}
           </div>
 

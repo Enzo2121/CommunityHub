@@ -56,7 +56,7 @@ export default function ContactsPage() {
     <div className="contacts-page page-wrapper">
       <div className="container">
         <div className="contacts-header">
-          <h1>🤝 Contacts</h1>
+          <h1>Contacts</h1>
           <p className="text-muted">Gérez votre réseau professionnel</p>
         </div>
 
@@ -69,7 +69,7 @@ export default function ContactsPage() {
         {/* Pending requests */}
         {pendingContacts.length > 0 && (
           <div className="pending-section card animate-fade-up">
-            <h3>⏳ Demandes en attente ({pendingContacts.length})</h3>
+            <h3>Demandes en attente ({pendingContacts.length})</h3>
             <div className="pending-list">
               {pendingContacts.map((c) => (
                 <div className="pending-item" key={c.id}>
@@ -89,7 +89,7 @@ export default function ContactsPage() {
                       });
                     }}
                   >
-                    ✓ Accepter
+                    Accepter
                   </button>
                 </div>
               ))}
@@ -111,7 +111,7 @@ export default function ContactsPage() {
           <div className="contacts-grid animate-fade-up">
             {acceptedContacts.length === 0 ? (
               <div className="empty-state">
-                <div className="empty-state-icon">🤝</div>
+                <div className="empty-state-icon">C</div>
                 <h3>Aucun contact pour l'instant</h3>
                 <p>Ajoutez des membres à votre réseau depuis l'onglet "Ajouter un contact".</p>
               </div>
@@ -135,7 +135,7 @@ export default function ContactsPage() {
                       className="btn btn-outline btn-sm"
                       onClick={() => setActiveMsgContact(isActive ? null : { id: contactUserId, pseudo: contactPseudo })}
                     >
-                      {isActive ? '✕ Fermer' : '💬 Message'}
+                      {isActive ? 'Fermer' : 'Message'}
                     </button>
 
                     {isActive && (
@@ -162,7 +162,7 @@ export default function ContactsPage() {
           <div className="add-contacts animate-fade-up">
             {isLoading ? <div className="spinner" /> : addableUsers.length === 0 ? (
               <div className="empty-state">
-                <div className="empty-state-icon">👥</div>
+                <div className="empty-state-icon">M</div>
                 <h3>Aucun membre disponible</h3>
                 <p>Vous êtes déjà en contact avec tous les membres !</p>
               </div>

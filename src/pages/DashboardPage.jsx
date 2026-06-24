@@ -19,9 +19,7 @@ import {
 import {
   fetchMyRegistrations,
   fetchMyEvents,
-  fetchEarnings,
-  rateOrganizer,
-  requestWithdrawal,
+  likeOrganizer,
   clearUserStatus,
 } from '../features/user/userSlice';
 import { useForm } from 'react-hook-form';
@@ -47,7 +45,6 @@ export default function DashboardPage() {
   const {
     registrations,
     myEvents,
-    earnings,
     isLoading: userLoading,
     success: userSuccess,
     error: userError,
@@ -87,7 +84,6 @@ export default function DashboardPage() {
       dispatch(fetchReceivedMessages());
       dispatch(fetchMyRegistrations());
       dispatch(fetchMyEvents());
-      dispatch(fetchEarnings());
     }
   }, [dispatch, isPremium]);
 
@@ -168,7 +164,7 @@ export default function DashboardPage() {
               </div>
               <p className="text-muted">@{user?.pseudo}</p>
               <p className="text-muted text-sm">{user?.email} · {user?.city}</p>
-              {isOrganizer && <span className="badge badge-primary" style={{ marginTop: '0.5rem' }}>🎪 Organisateur</span>}
+              {isOrganizer && <span className="badge badge-primary" style={{ marginTop: '0.5rem' }}>Organisateur</span>}
             </div>
           </div>
 
@@ -191,7 +187,7 @@ export default function DashboardPage() {
               <section className="dashboard-section card animate-fade-up">
                 <div className="section-header">
                   <div>
-                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>🎯 Mes compétences</h2>
+                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>Mes compétences</h2>
                     <p className="text-muted text-sm">Proposez vos expertises à la communauté</p>
                   </div>
                 </div>
@@ -240,7 +236,7 @@ export default function DashboardPage() {
                 {/* Skills list */}
                 {mySkills.length === 0 ? (
                   <div className="empty-state">
-                    <div className="empty-state-icon">🎯</div>
+                    <div className="empty-state-icon">C</div>
                     <h3>Aucune compétence</h3>
                     <p>Ajoutez votre première compétence ci-dessus.</p>
                   </div>
@@ -263,7 +259,7 @@ export default function DashboardPage() {
               <section className="dashboard-section card animate-fade-up">
                 <div className="section-header">
                   <div>
-                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>📥 Mes messages reçus</h2>
+                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>Mes messages reçus</h2>
                     <p className="text-muted text-sm">Vos messages récents des autres membres</p>
                   </div>
                 </div>
@@ -273,7 +269,7 @@ export default function DashboardPage() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="🔍 Filtrer les messages par expéditeur ou contenu..."
+                    placeholder="Filtrer les messages par expéditeur ou contenu..."
                     value={messageFilter}
                     onChange={(e) => setMessageFilter(e.target.value)}
                   />
@@ -281,7 +277,7 @@ export default function DashboardPage() {
 
                 {filteredMessages.length === 0 ? (
                   <div className="empty-state" style={{ paddingBlock: '1.5rem' }}>
-                    <div className="empty-state-icon">💬</div>
+                    <div className="empty-state-icon">M</div>
                     <h3>Aucun message trouvé</h3>
                     <p>Vos messages reçus s'afficheront ici.</p>
                   </div>
@@ -313,7 +309,7 @@ export default function DashboardPage() {
               <section className="dashboard-section card animate-fade-up">
                 <div className="section-header">
                   <div>
-                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>📅 Mes événements</h2>
+                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>Mes événements</h2>
                     <p className="text-muted text-sm">Vos inscriptions et événements organisés</p>
                   </div>
                 </div>
@@ -321,7 +317,7 @@ export default function DashboardPage() {
                 {userSuccess && <div className="alert alert-success">{userSuccess}</div>}
                 {userError && <div className="alert alert-danger">{userError}</div>}
 
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>🎟️ Mes inscriptions</h3>
+                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>Mes inscriptions</h3>
                 {registrations.length === 0 ? (
                   <div className="empty-state" style={{ paddingBlock: '1rem' }}>
                     <p className="text-muted text-sm">Vous n'êtes inscrit à aucun événement.</p>
@@ -345,10 +341,10 @@ export default function DashboardPage() {
                               type="button"
                               className="btn btn-success btn-sm"
                               style={{ marginTop: '0.5rem', alignSelf: 'flex-start' }}
-                              onClick={() => dispatch(rateOrganizer({ event_id: evt.id, organizer_id: evt.organizer_id, vote: 1 }))}
+                              onClick={() => dispatch(likeOrganizer(evt.organizer_id))}
                               disabled={userLoading}
                             >
-                              👍 J'aime l'organisateur
+                              Apprecier l'organisateur
                             </button>
                           )}
                         </div>
@@ -359,7 +355,7 @@ export default function DashboardPage() {
 
                 <hr className="divider" />
 
-                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem', marginTop: '1rem' }}>🎪 Mes événements organisés</h3>
+                <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem', marginTop: '1rem' }}>Mes événements organisés</h3>
                 {myEvents.length === 0 ? (
                   <div className="empty-state" style={{ paddingBlock: '1rem' }}>
                     <p className="text-muted text-sm">Vous n'avez organisé aucun événement.</p>
@@ -389,7 +385,7 @@ export default function DashboardPage() {
               <section className="dashboard-section card animate-fade-up">
                 <div className="section-header">
                   <div>
-                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>🤝 Mes contacts</h2>
+                    <h2 className="section-title" style={{ fontSize: '1.3rem' }}>Mes contacts</h2>
                     <p className="text-muted text-sm">Gérez votre réseau et discutez</p>
                   </div>
                 </div>
@@ -439,7 +435,7 @@ export default function DashboardPage() {
                               });
                             }}
                           >
-                            ✓ Accepter
+                            Accepter
                           </button>
                         </div>
                       ))}
@@ -450,7 +446,7 @@ export default function DashboardPage() {
                 {/* Accepted Contacts list */}
                 {acceptedContacts.length === 0 ? (
                   <div className="empty-state" style={{ paddingBlock: '1.5rem' }}>
-                    <div className="empty-state-icon">👥</div>
+                    <div className="empty-state-icon">C</div>
                     <h3>Aucun contact</h3>
                     <p>Vos contacts acceptés apparaîtront ici.</p>
                   </div>
@@ -479,7 +475,7 @@ export default function DashboardPage() {
                                 </strong>
                               </div>
                             </div>
-                            <span style={{ fontSize: '1rem' }}>💬</span>
+                            <span style={{ fontSize: '1rem' }}>Message</span>
                           </div>
 
                           {/* Inline private message form on click */}
@@ -511,17 +507,17 @@ export default function DashboardPage() {
 
               {/* Quick links & payments history */}
               <section className="dashboard-section card animate-fade-up">
-                <h2 className="section-title" style={{ fontSize: '1.3rem' }}>📋 Accès rapide</h2>
+                <h2 className="section-title" style={{ fontSize: '1.3rem' }}>Accès rapide</h2>
                 <div className="quick-links" style={{ marginBottom: '1.25rem' }}>
                   <Link to="/events/create" className="quick-link-card">
-                    <span className="quick-link-icon">🎉</span>
+                    <span className="quick-link-icon">+</span>
                     <div>
                       <strong>Créer un événement</strong>
                       <p className="text-muted text-sm">Organisez une rencontre</p>
                     </div>
                   </Link>
                   <Link to="/events" className="quick-link-card">
-                    <span className="quick-link-icon">📅</span>
+                    <span className="quick-link-icon">{'>'}</span>
                     <div>
                       <strong>Tous les événements</strong>
                       <p className="text-muted text-sm">Explorer et s'inscrire</p>
@@ -532,7 +528,7 @@ export default function DashboardPage() {
                 {payments.length > 0 && (
                   <>
                     <hr className="divider" />
-                    <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>💳 Historique paiements</h3>
+                    <h3 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>Historique paiements</h3>
                     <div className="payments-list">
                       {payments.map((p) => (
                         <div className="payment-item" key={p.id}>
@@ -542,40 +538,6 @@ export default function DashboardPage() {
                       ))}
                     </div>
                   </>
-                )}
-              </section>
-
-              {/* Mes finances */}
-              <section className="dashboard-section card animate-fade-up">
-                <h2 className="section-title" style={{ fontSize: '1.3rem' }}>💰 Mes finances</h2>
-
-                {earnings ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="text-muted">Argent généré</span>
-                      <strong style={{ fontSize: '1.25rem' }}>{earnings.total || 0} €</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="text-muted text-sm">Inscriptions payantes</span>
-                      <span className="badge badge-primary">{earnings.paid_count || 0}</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span className="text-muted text-sm">Commission prélevée (10 %)</span>
-                      <span className="badge badge-warning">-{earnings.fees || 0} €</span>
-                    </div>
-                    <button
-                      type="button"
-                      className="btn btn-accent btn-full"
-                      onClick={() => dispatch(requestWithdrawal())}
-                      disabled={userLoading || (earnings.total || 0) <= 0}
-                    >
-                      {userLoading ? '...' : '💸 Demander le paiement'}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="empty-state" style={{ paddingBlock: '1rem' }}>
-                    <p className="text-muted text-sm">Aucune donnée financière disponible.</p>
-                  </div>
                 )}
               </section>
             </div>

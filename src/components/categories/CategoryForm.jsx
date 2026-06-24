@@ -31,7 +31,7 @@ export default function CategoryForm() {
 
   return (
     <div className="card" style={{ padding: '1.25rem' }}>
-      <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>🗂️ Créer une catégorie</h3>
+      <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Créer une catégorie</h3>
       {success && <div className="alert alert-success" style={{ marginBottom: '0.75rem' }}>{success}</div>}
       {error && <div className="alert alert-danger" style={{ marginBottom: '0.75rem' }}>{error}</div>}
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', gap: '0.5rem' }}>

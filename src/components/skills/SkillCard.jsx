@@ -2,7 +2,7 @@ export default function SkillCard({ skill }) {
   return (
     <article className="skill-card card">
       <div className="skill-card-header">
-        <div className="skill-card-icon">🎯</div>
+        <div className="skill-card-icon">{skill.title?.[0]?.toUpperCase() || '?'}</div>
         <span className="skill-price-tag">{skill.daily_price} €/j</span>
       </div>
       <h3 className="skill-card-title">{skill.title}</h3>

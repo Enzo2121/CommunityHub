@@ -10,6 +10,7 @@ export default function MainNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isPremium = user?.is_premium || user?.premium === 1 || user?.premium === true;
+  const isAdmin = user?.role === 'admin' || user?.is_admin === true || user?.is_admin === 1;
 
   const handleLogout = async () => {
     await dispatch(logoutUser());
@@ -36,6 +37,7 @@ export default function MainNavbar() {
           {token && (
             <>
               <li><NavLink to="/dashboard" className={navLinkClass}>Dashboard</NavLink></li>
+              {isAdmin && <li><NavLink to="/admin" className={navLinkClass}>Administration</NavLink></li>}
               {isPremium && (
                 <>
                   <li><NavLink to="/contacts" className={navLinkClass}>Contacts</NavLink></li>
@@ -50,7 +52,7 @@ export default function MainNavbar() {
         <div className="navbar-actions">
           {token ? (
             <div className="navbar-user">
-              {isPremium && <span className="badge badge-premium">⭐ Premium</span>}
+              {isPremium && <span className="badge badge-premium">Premium</span>}
               <div className="navbar-user-menu">
                 <button className="navbar-avatar-btn" onClick={() => setMenuOpen(!menuOpen)}>
                   {user?.avatar ? (
@@ -66,26 +68,26 @@ export default function MainNavbar() {
                 {menuOpen && (
                   <div className="navbar-dropdown">
                     <Link to="/profile" className="dropdown-item" onClick={() => setMenuOpen(false)}>
-                      👤 Mon profil
+                      Mon profil
                     </Link>
                     {isPremium && (
                       <>
                         <Link to="/my-skills" className="dropdown-item" onClick={() => setMenuOpen(false)}>
-                          🎯 Mes compétences
+                          Mes compétences
                         </Link>
                         <Link to="/events/create" className="dropdown-item" onClick={() => setMenuOpen(false)}>
-                          ➕ Créer un événement
+                          Créer un événement
                         </Link>
                       </>
                     )}
                     {!isPremium && (
                       <Link to="/premium" className="dropdown-item dropdown-item-premium" onClick={() => setMenuOpen(false)}>
-                        ⭐ Passer Premium
+                        Passer Premium
                       </Link>
                     )}
                     <hr className="dropdown-divider" />
                     <button className="dropdown-item dropdown-item-danger" onClick={handleLogout}>
-                      🚪 Déconnexion
+                      Déconnexion
                     </button>
                   </div>
                 )}
@@ -119,6 +121,7 @@ export default function MainNavbar() {
           {token ? (
             <>
               <NavLink to="/dashboard" className="mobile-link" onClick={() => setMenuOpen(false)}>Dashboard</NavLink>
+              {isAdmin && <NavLink to="/admin" className="mobile-link" onClick={() => setMenuOpen(false)}>Administration</NavLink>}
               {isPremium && (
                 <>
                   <NavLink to="/contacts" className="mobile-link" onClick={() => setMenuOpen(false)}>Contacts</NavLink>
@@ -128,9 +131,9 @@ export default function MainNavbar() {
                 </>
               )}
               {!isPremium && (
-                <NavLink to="/premium" className="mobile-link mobile-link-premium" onClick={() => setMenuOpen(false)}>⭐ Passer Premium</NavLink>
+                <NavLink to="/premium" className="mobile-link mobile-link-premium" onClick={() => setMenuOpen(false)}>Passer Premium</NavLink>
               )}
-              <button className="mobile-link mobile-link-danger" onClick={handleLogout}>🚪 Déconnexion</button>
+              <button className="mobile-link mobile-link-danger" onClick={handleLogout}>Déconnexion</button>
             </>
           ) : (
             <>

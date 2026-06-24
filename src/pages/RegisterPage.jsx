@@ -172,7 +172,7 @@ export default function RegisterPage() {
               <div className="status-radio-group">
                 <label className={`status-radio ${watch('user_status_id') === '1' ? 'selected' : ''}`}>
                   <input type="radio" value="1" {...register('user_status_id')} />
-                  <span className="status-radio-icon">👤</span>
+                  <span className="status-radio-icon">M</span>
                   <div>
                     <strong>Membre</strong>
                     <p>Participez aux événements et à la communauté</p>
@@ -180,7 +180,7 @@ export default function RegisterPage() {
                 </label>
                 <label className={`status-radio ${watch('user_status_id') === '2' ? 'selected' : ''}`}>
                   <input type="radio" value="2" {...register('user_status_id')} />
-                  <span className="status-radio-icon">🎪</span>
+                  <span className="status-radio-icon">O</span>
                   <div>
                     <strong>Organisateur</strong>
                     <p>Créez et gérez des événements (statut premium requis)</p>

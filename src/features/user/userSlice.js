@@ -14,8 +14,8 @@ export const fetchMyRegistrations = createAsyncThunk(
   'user/fetchRegistrations',
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth;
-      return await get('/users/me/registrations.php', token);
+      const { token, user } = getState().auth;
+      return await get(`/events/index.php?registered_user_id=${user.id}`, token);
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -26,44 +26,20 @@ export const fetchMyEvents = createAsyncThunk(
   'user/fetchEvents',
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth;
-      return await get('/users/me/events.php', token);
+      const { token, user } = getState().auth;
+      return await get(`/events/index.php?creator_id=${user.id}`, token);
     } catch (err) {
       return rejectWithValue(err.message);
     }
   }
 );
 
-export const fetchEarnings = createAsyncThunk(
-  'user/fetchEarnings',
-  async (_, { getState, rejectWithValue }) => {
+export const likeOrganizer = createAsyncThunk(
+  'user/likeOrganizer',
+  async (likedUserId, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth;
-      return await get('/users/me/earnings.php', token);
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-export const rateOrganizer = createAsyncThunk(
-  'user/rateOrganizer',
-  async (payload, { getState, rejectWithValue }) => {
-    try {
-      const { token } = getState().auth;
-      return await post('/events/rate-organizer.php', payload, token);
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-export const requestWithdrawal = createAsyncThunk(
-  'user/requestWithdrawal',
-  async (payload, { getState, rejectWithValue }) => {
-    try {
-      const { token } = getState().auth;
-      return await post('/users/me/withdraw.php', payload, token);
+      return await post('/users/like.php', { liked_user_id: likedUserId }, token);
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -75,7 +51,6 @@ const userSlice = createSlice({
   initialState: {
     registrations: [],
     myEvents: [],
-    earnings: null,
     isLoading: false,
     error: null,
     success: null,
@@ -105,26 +80,12 @@ const userSlice = createSlice({
       })
       .addCase(fetchMyEvents.rejected, rejected)
 
-      .addCase(fetchEarnings.pending, pending)
-      .addCase(fetchEarnings.fulfilled, (state, action) => {
+      .addCase(likeOrganizer.pending, pending)
+      .addCase(likeOrganizer.fulfilled, (state) => {
         state.isLoading = false;
-        state.earnings = action.payload?.earnings || action.payload || null;
+        state.success = 'Organisateur apprecie.';
       })
-      .addCase(fetchEarnings.rejected, rejected)
-
-      .addCase(rateOrganizer.pending, pending)
-      .addCase(rateOrganizer.fulfilled, (state) => {
-        state.isLoading = false;
-        state.success = 'Organisateur noté avec succès !';
-      })
-      .addCase(rateOrganizer.rejected, rejected)
-
-      .addCase(requestWithdrawal.pending, pending)
-      .addCase(requestWithdrawal.fulfilled, (state) => {
-        state.isLoading = false;
-        state.success = 'Demande de paiement envoyée.';
-      })
-      .addCase(requestWithdrawal.rejected, rejected);
+      .addCase(likeOrganizer.rejected, rejected);
   },
 });
 

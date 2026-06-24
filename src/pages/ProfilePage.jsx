@@ -61,7 +61,7 @@ export default function ProfilePage() {
 
         <div className="auth-card card animate-fade-up" style={{ maxWidth: '720px' }}>
           <div style={{ marginBottom: '2rem' }}>
-            <h1>👤 Modifier mon profil</h1>
+            <h1>Modifier mon profil</h1>
             <p className="text-muted">Mettez à jour vos informations personnelles</p>
           </div>
 
@@ -167,7 +167,7 @@ export default function ProfilePage() {
               className="btn btn-primary btn-full btn-lg"
               disabled={isLoading || !isDirty}
             >
-              {isLoading ? <><span className="spinner spinner-sm" /> Enregistrement...</> : '💾 Enregistrer les modifications'}
+              {isLoading ? <><span className="spinner spinner-sm" /> Enregistrement...</> : 'Enregistrer les modifications'}
             </button>
           </form>
         </div>
