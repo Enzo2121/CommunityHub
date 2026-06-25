@@ -1,49 +1,100 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { createEvent, fetchCategories, clearEventStatus } from '../features/events/eventsSlice';
-import CategoryForm from '../components/categories/CategoryForm';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import {
+  fetchEventById,
+  updateEvent,
+  fetchCategories,
+  clearEventStatus,
+} from '../features/events/eventsSlice';
 import './AuthPages.css';
 import './CreateEventPage.css';
 
-export default function CreateEventPage() {
+function toDatetimeLocal(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export default function EditEventPage() {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categories, isLoading, error, success } = useSelector((s) => s.events);
+  const { currentEvent, categories, isLoading, error, success } = useSelector((s) => s.events);
   const { user } = useSelector((s) => s.auth);
 
-  const isPremium = user?.is_premium || user?.premium === 1 || user?.premium === true;
   const isAdmin = user?.role === 'admin' || user?.is_admin === true || user?.is_admin === 1;
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({
-    defaultValues: { event_type: 'presentiel', price_type: 'gratuit', price: 0 },
-  });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const priceType = watch('price_type');
 
   useEffect(() => {
     dispatch(fetchCategories());
+    dispatch(fetchEventById(id));
     return () => dispatch(clearEventStatus());
-  }, [dispatch]);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (currentEvent) {
+      reset({
+        event_category_id: currentEvent.event_category_id || currentEvent.category?.id || '',
+        name: currentEvent.name || '',
+        event_type: currentEvent.event_type || 'presentiel',
+        price_type: currentEvent.price_type || 'gratuit',
+        price: currentEvent.price || 0,
+        max_participants: currentEvent.max_participants || '',
+        start_date: toDatetimeLocal(currentEvent.start_date),
+        end_date: toDatetimeLocal(currentEvent.end_date),
+        image: currentEvent.image || '',
+        introduction: currentEvent.introduction || '',
+      });
+    }
+  }, [currentEvent, reset]);
 
   useEffect(() => {
     if (success) {
       setTimeout(() => {
         dispatch(clearEventStatus());
-        navigate('/events');
-      }, 2000);
+        navigate(`/events/${id}`);
+      }, 1500);
     }
-  }, [success, dispatch, navigate]);
+  }, [success, dispatch, navigate, id]);
 
-  if (!isPremium) {
+  if (!currentEvent && !isLoading) {
     return (
       <div className="page-wrapper container text-center">
         <div className="empty-state">
-          <div className="empty-state-icon">⭐</div>
-          <h3>Réservé aux membres premium</h3>
-          <p>Pour créer un événement, vous devez avoir le statut premium.</p>
-          <Link to="/premium" className="btn btn-accent" style={{ marginTop: '1rem' }}>Passer Premium</Link>
+          <h3>Événement introuvable</h3>
+          <Link to="/events" className="btn btn-primary" style={{ marginTop: '1rem' }}>
+            Retour aux événements
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const isOrganizer = currentEvent && user && currentEvent.organizer_id === user.id;
+  const canEdit = isOrganizer || isAdmin;
+
+  if (currentEvent && !canEdit) {
+    return (
+      <div className="page-wrapper container text-center">
+        <div className="empty-state">
+          <h3>Accès refusé</h3>
+          <p className="text-muted">Vous ne pouvez modifier que vos propres événements.</p>
+          <Link to={`/events/${id}`} className="btn btn-primary" style={{ marginTop: '1rem' }}>
+            Retour à l'événement
+          </Link>
         </div>
       </div>
     );
@@ -70,23 +121,30 @@ export default function CreateEventPage() {
     }
 
     const payload = {
-      ...data,
+      event_id: parseInt(id),
       event_category_id: parseInt(data.event_category_id),
+      name: data.name,
+      event_type: data.event_type,
+      price_type: data.price_type,
       price: data.price_type === 'gratuit' ? 0 : parseFloat(data.price),
       max_participants: parseInt(data.max_participants),
+      start_date: data.start_date,
+      end_date: data.end_date,
+      image: data.image || null,
+      introduction: data.introduction,
     };
-    dispatch(createEvent(payload));
+    dispatch(updateEvent(payload));
   };
 
   return (
     <div className="page-wrapper">
       <div className="container">
-        <Link to="/events" className="back-link">← Retour aux événements</Link>
+        <Link to={`/events/${id}`} className="back-link">← Retour à l'événement</Link>
 
         <div className="create-event-card card animate-fade-up">
           <div style={{ marginBottom: '2rem' }}>
-            <h1>Créer un événement</h1>
-            <p className="text-muted">Organisez un événement pour la communauté</p>
+            <h1>Modifier l'événement</h1>
+            <p className="text-muted">Mettez à jour les informations de l'événement</p>
           </div>
 
           {success && <div className="alert alert-success">{success}</div>}
@@ -106,13 +164,10 @@ export default function CreateEventPage() {
             <div className="form-group">
               <label className="form-label">Catégorie *</label>
               {isLoading && categories.length === 0 ? (
-                <div className="text-muted text-sm">⏳ Chargement des catégories…</div>
+                <div className="text-muted text-sm">Chargement des catégories…</div>
               ) : categories.length === 0 ? (
                 <div className="alert alert-warning text-sm">
-                  Aucune catégorie n'existe encore.
-                  {isAdmin
-                    ? ' Créez-en une ci-dessous.'
-                    : ' Seul un administrateur peut créer des catégories. Contactez un admin pour en ajouter une.'}
+                  Aucune catégorie disponible.
                 </div>
               ) : (
                 <select
@@ -126,7 +181,6 @@ export default function CreateEventPage() {
                 </select>
               )}
               {errors.event_category_id && <span className="form-error">{errors.event_category_id.message}</span>}
-              {isAdmin && <div style={{ marginTop: '0.75rem' }}><CategoryForm /></div>}
             </div>
 
             <div className="form-grid">
@@ -221,7 +275,7 @@ export default function CreateEventPage() {
             </div>
 
             <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={isLoading}>
-              {isLoading ? <><span className="spinner spinner-sm" /> Création...</> : 'Créer l\'événement'}
+              {isLoading ? <><span className="spinner spinner-sm" /> Enregistrement...</> : 'Enregistrer les modifications'}
             </button>
           </form>
         </div>

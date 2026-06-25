@@ -22,8 +22,7 @@
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
@@ -31,19 +30,7 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-.navbar-brand strong { color: var(--primary); }
-.navbar-brand-icon {
-  width: 30px;
-  height: 30px;
-  background: var(--primary);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  color: white;
-  flex-shrink: 0;
-}
+.navbar-brand strong { color: inherit; }
 
 /* Nav links */
 .navbar-links {
@@ -218,12 +205,3 @@
 }
 
 .app-main { flex: 1; }
-
-.app-footer {
-  border-top: 1px solid var(--border);
-  padding: 1.25rem 0;
-  text-align: center;
-  color: var(--text-subtle);
-  font-size: 0.8rem;
-  background: var(--surface);
-}

@@ -31,6 +31,7 @@ export default function EventDetailsPage() {
   const [paymentMethod, setPaymentMethod] = useState('stripe');
 
   const isPremium = user?.is_premium || user?.premium === 1 || user?.premium === true;
+  const isAdmin = user?.role === 'admin' || user?.is_admin === true || user?.is_admin === 1;
 
   const { register, handleSubmit, reset } = useForm();
 
@@ -176,6 +177,12 @@ export default function EventDetailsPage() {
           {/* Sidebar */}
           <aside className="event-detail-sidebar animate-fade-up">
             <div className="event-register-card card">
+              {(isOrganizer || isAdmin) && (
+                <Link to={`/events/${id}/edit`} className="btn btn-outline btn-full" style={{ marginBottom: '1rem' }}>
+                  Modifier l'événement
+                </Link>
+              )}
+
               <div className="event-capacity">
                 <span className="event-detail-label">Participants</span>
                 <div className="capacity-bar-wrap">
@@ -235,7 +242,7 @@ export default function EventDetailsPage() {
               ) : token && !isPremium ? (
                 <div className="register-premium-cta">
                   <p className="text-muted text-sm">Les inscriptions sont réservées aux membres premium.</p>
-                  <Link to="/premium" className="btn btn-accent btn-full btn-sm">⭐ Passer Premium</Link>
+                  <Link to="/premium" className="btn btn-accent btn-full btn-sm">Passer Premium</Link>
                 </div>
               ) : (
                 <Link to="/login" className="btn btn-outline btn-full">Se connecter pour s'inscrire</Link>

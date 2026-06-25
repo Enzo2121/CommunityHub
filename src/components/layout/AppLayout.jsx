@@ -24,11 +24,6 @@ export default function AppLayout() {
       <main className="app-main">
         <Outlet />
       </main>
-      <footer className="app-footer">
-        <div className="container">
-          <p>© {new Date().getFullYear()} CommunityHub — Plateforme communautaire premium</p>
-        </div>
-      </footer>
     </div>
   );
 }

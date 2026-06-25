@@ -26,7 +26,6 @@ export default function MainNavbar() {
       <div className="navbar-inner container">
         {/* Logo */}
         <Link to="/" className="navbar-brand" onClick={() => setMenuOpen(false)}>
-          <div className="navbar-brand-icon">C</div>
           <span>Community<strong>Hub</strong></span>
         </Link>
 

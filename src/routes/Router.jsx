@@ -8,6 +8,7 @@ import RegisterPage from '../pages/RegisterPage';
 import EventsPage from '../pages/EventsPage';
 import EventDetailsPage from '../pages/EventDetailsPage';
 import CreateEventPage from '../pages/CreateEventPage';
+import EditEventPage from '../pages/EditEventPage';
 import DashboardPage from '../pages/DashboardPage';
 import ProfilePage from '../pages/ProfilePage';
 import ContactsPage from '../pages/ContactsPage';
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
           { path: '/messages', element: <MessagesPage /> },
           { path: '/my-skills', element: <MySkillPage /> },
           { path: '/events/create', element: <CreateEventPage /> },
+          { path: '/events/:id/edit', element: <EditEventPage /> },
         ],
       },
 

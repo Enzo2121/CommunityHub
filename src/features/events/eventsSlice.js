@@ -86,6 +86,18 @@ export const moderateEventMessage = createAsyncThunk(
   }
 );
 
+export const updateEvent = createAsyncThunk(
+  'events/updateEvent',
+  async (payload, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      return await post('/events/update.php', payload, token);
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 export const fetchCategories = createAsyncThunk(
   'events/fetchCategories',
   async (_, { getState, rejectWithValue }) => {
@@ -179,6 +191,17 @@ const eventsSlice = createSlice({
         }
       })
       .addCase(moderateEventMessage.rejected, rejected)
+
+      .addCase(updateEvent.pending, pending)
+      .addCase(updateEvent.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = 'Événement mis à jour';
+        const updated = action.payload?.event || action.payload;
+        if (updated && state.currentEvent && state.currentEvent.id === updated.id) {
+          state.currentEvent = { ...state.currentEvent, ...updated };
+        }
+      })
+      .addCase(updateEvent.rejected, rejected)
 
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.categories = toArray(action.payload);
